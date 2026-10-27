@@ -5,76 +5,308 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فاتورة تقديم خدمات استشارية | أميرة غربي الشمري</title>
     
-    <!-- Tailwind CSS CDN (Optional Visual Enhancement) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-
-    <script>
-        if (window.tailwind) {
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            navy: { 950: '#090d16', 900: '#0f172a', 800: '#1e3a8a', 700: '#1d4ed8' },
-                            skyblue: { 500: '#0ea5e9', 600: '#0284c7', 50: '#f0f9ff' }
-                        },
-                        fontFamily: {
-                            ar: ['Tajawal', 'sans-serif'],
-                            en: ['Inter', 'sans-serif']
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        /* CSS Core Resets - Standard Fail-Safe */
+        /* Re-set Standard Body & Text Defaults */
         *, *::before, *::after {
             box-sizing: border-box;
-        }
-
-        html, body {
             margin: 0;
             padding: 0;
-            visibility: visible !important;
-            opacity: 1 !important;
-            font-family: 'Tajawal', 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Inter', system-ui, sans-serif;
             background-color: #f1f5f9;
             color: #0f172a;
+            padding: 20px 10px;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
 
-        /* Content Editable Visual Style */
+        /* Top Action Toolbar */
+        .toolbar {
+            max-width: 850px;
+            margin: 0 auto 15px auto;
+            background: #ffffff;
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .lang-switch {
+            display: flex;
+            background: #f1f5f9;
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            color: #475569;
+        }
+        .lang-btn.active {
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .toolbar-info {
+            font-size: 12px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-add { background: #1e293b; color: #ffffff; }
+        .btn-add:hover { background: #0f172a; }
+        .btn-print { background: #0f172a; color: #ffffff; }
+        .btn-print:hover { background: #1e3a8a; }
+
+        /* Main Invoice Card Container */
+        .invoice-card {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 28px 32px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        /* Top Bar Accent */
+        .top-accent {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #0f172a 0%, #1e3a8a 50%, #0ea5e9 100%);
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+
+        /* Header Section Layout */
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            gap: 15px;
+        }
+
+        .consultant-name {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .consultant-title {
+            color: #0284c7;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 2px;
+            margin-bottom: 6px;
+        }
+
+        .info-list {
+            font-size: 11px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .meta-box {
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #475569;
+            margin-top: 6px;
+            min-width: 190px;
+        }
+
+        .meta-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 3px;
+        }
+        .meta-item:last-child { margin-bottom: 0; }
+
+        .invoice-badge {
+            background: #0f172a;
+            color: #ffffff;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 800;
+            border-right: 4px solid #0ea5e9;
+            display: inline-block;
+        }
+        [dir="ltr"] .invoice-badge {
+            border-right: none;
+            border-left: 4px solid #0ea5e9;
+        }
+
+        /* Billed To Box */
+        .billed-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-right: 4px solid #0f172a;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+        [dir="ltr"] .billed-box {
+            border-right: 1px solid #e2e8f0;
+            border-left: 4px solid #0f172a;
+        }
+
+        /* Services Table */
+        .table-container {
+            margin: 12px 0;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        th {
+            background: #0f172a;
+            color: #ffffff;
+            padding: 8px 10px;
+            text-align: right;
+            font-weight: 700;
+        }
+        [dir="ltr"] th { text-align: left; }
+
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #1e293b;
+        }
+
+        .text-center { text-align: center !important; }
+        .text-left { text-align: left !important; }
+        .text-right { text-align: right !important; }
+
+        /* Contenteditable Focus Effect */
         [contenteditable="true"] {
             outline: none;
-            transition: background-color 0.2s ease, box-shadow 0.2s ease;
-            border-radius: 4px;
-            padding: 2px 4px;
+            border-radius: 3px;
+            padding: 1px 3px;
+            transition: all 0.15s;
         }
-        [contenteditable="true"]:hover,
-        [contenteditable="true"]:focus {
+        [contenteditable="true"]:hover, [contenteditable="true"]:focus {
             background-color: #e0f2fe;
             box-shadow: 0 0 0 2px #0284c7;
         }
 
-        /* Strict Single A4 Page Print Engine */
+        /* Totals & Notes Section */
+        .bottom-grid {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            padding-top: 12px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 8px;
+        }
+
+        .notes-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px 12px;
+            border-radius: 8px;
+            width: 50%;
+            font-size: 11px;
+            color: #475569;
+        }
+
+        .totals-box {
+            width: 42%;
+            font-size: 11px;
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #f1f5f9;
+            color: #475569;
+        }
+
+        .grand-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 13px;
+            color: #0f172a;
+            margin-top: 6px;
+        }
+
+        /* Footer Section */
+        .footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 11px;
+        }
+
+        /* STRICT SINGLE A4 PAGE PRINT STYLES */
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 0; /* Zero page margin to hand control to wrapper */
+                margin: 8mm 10mm;
             }
 
-            html, body {
+            body {
                 background: #ffffff !important;
-                width: 210mm;
-                height: 297mm;
-                overflow: hidden;
+                padding: 0 !important;
+                margin: 0 !important;
             }
 
             .no-print {
@@ -82,31 +314,24 @@
             }
 
             .invoice-card {
+                max-width: 100% !important;
+                width: 100% !important;
                 box-shadow: none !important;
                 border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
                 border-radius: 0 !important;
-                width: 210mm !important;
-                max-width: 210mm !important;
-                height: 297mm !important;
-                max-height: 297mm !important;
-                padding: 12mm 15mm !important;
-                margin: 0 auto !important;
-                position: relative !important;
-                box-sizing: border-box !important;
-                page-break-inside: avoid !important;
-                page-break-after: avoid !important;
-                display: flex !important;
-                flex-direction: column !important;
-                justify-content: space-between !important;
             }
 
-            [contenteditable="true"]:hover,
-            [contenteditable="true"]:focus {
+            .top-accent {
+                display: none !important;
+            }
+
+            [contenteditable="true"]:hover, [contenteditable="true"]:focus {
                 background: transparent !important;
                 box-shadow: none !important;
             }
 
-            /* Prevent table breaks */
             table {
                 page-break-inside: avoid;
             }
@@ -116,83 +341,299 @@
         }
     </style>
 </head>
-<body class="py-6 px-3 sm:px-4 text-slate-800">
+<body>
 
-    <!-- Top Action Toolbar (No Print) -->
-    <header class="max-w-4xl mx-auto mb-4 flex flex-wrap justify-between items-center gap-3 no-print bg-white p-3 rounded-2xl shadow-sm border border-slate-200">
-        <!-- Language Switcher -->
-        <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
-            <button id="btnAr" onclick="switchLanguage('ar')" class="px-4 py-1.5 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-sm">
-                العربية
-            </button>
-            <button id="btnEn" onclick="switchLanguage('en')" class="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition">
-                English
-            </button>
+    <!-- Toolbar (No Print) -->
+    <div class="toolbar no-print">
+        <div class="lang-switch">
+            <button id="btnAr" onclick="switchLanguage('ar')" class="lang-btn active">العربية</button>
+            <button id="btnEn" onclick="switchLanguage('en')" class="lang-btn">English</button>
         </div>
 
-        <!-- Help Info -->
-        <div class="hidden md:flex items-center gap-2 text-slate-500 text-xs">
-            <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <span data-i18n="editHint">اضغط على أي نص للتعديل مباشرة. يتم حساب الإجمالي تلقائياً.</span>
+        <div class="toolbar-info">
+            <span> اضغط على أي نص للتعديل مباشرة. يتم حساب الإجمالي تلقائياً.</span>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="flex gap-2">
-            <button onclick="addRow()" class="bg-slate-800 hover:bg-slate-900 text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
-                <svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-                <span data-i18n="addRowBtn">إضافة بند</span>
+        <div class="btn-group">
+            <button onclick="addRow()" class="btn-action btn-add">
+                + <span data-i18n="addRowBtn">إضافة بند</span>
             </button>
-            <button onclick="window.print()" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-md">
-                <svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-                </svg>
+            <button onclick="window.print()" class="btn-action btn-print">
                 <span data-i18n="printBtn">طباعة / حفظ PDF</span>
             </button>
         </div>
-    </header>
+    </div>
 
-    <!-- Main Executive Invoice Document Container -->
-    <main class="invoice-card max-w-4xl mx-auto bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-200 relative overflow-hidden">
-        
-        <!-- Top Visual Accent Line -->
-        <div class="absolute top-0 right-0 left-0 h-2 bg-gradient-to-r from-slate-900 via-blue-900 to-sky-500"></div>
+    <!-- Main Invoice Document -->
+    <div class="invoice-card">
+        <div class="top-accent"></div>
 
-        <div>
-            <!-- Header Section -->
-            <section class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-4 border-b border-slate-200">
-                <!-- Consultant Info -->
-                <div class="space-y-1 max-w-lg">
-                    <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug" contenteditable="true" data-i18n="consultantName">أميرة غربي الشمري</h1>
-                    <p class="text-sky-600 font-bold text-xs sm:text-sm tracking-wide" contenteditable="true" data-i18n="consultantTitle">مستشار إداري وتنفيذي</p>
-                    
-                    <div class="pt-1 space-y-0.5 text-xs text-slate-600">
-                        <p class="flex items-center gap-2">
-                            <span class="font-semibold text-slate-900" data-i18n="idLabel">الهوية الوطنية:</span>
-                            <span contenteditable="true" dir="ltr" class="font-mono">1043972080</span>
-                        </p>
-                        <p class="flex items-center gap-2">
-                            <span class="font-semibold text-slate-900" data-i18n="emailLabel">البريد الإلكتروني:</span>
-                            <span contenteditable="true" dir="ltr">Amirah@example.com</span>
-                        </p>
-                        <p class="flex items-center gap-2">
-                            <span class="font-semibold text-slate-900" data-i18n="phoneLabel">الجوال:</span>
-                            <span contenteditable="true" dir="ltr">+966 50 000 0000</span>
-                        </p>
-                        <p class="flex items-center gap-2">
-                            <span class="font-semibold text-slate-900" data-i18n="addressLabel">العنوان:</span>
-                            <span contenteditable="true" data-i18n="consultantAddress">الرياض، المملكة العربية السعودية</span>
-                        </p>
+        <!-- Header Section -->
+        <div class="header-row">
+            <div>
+                <h1 class="consultant-name" contenteditable="true" data-i18n="consultantName">أميرة غربي الشمري</h1>
+                <p class="consultant-title" contenteditable="true" data-i18n="consultantTitle">مستشار إداري وتنفيذي</p>
+                
+                <div class="info-list">
+                    <p><strong data-i18n="idLabel">الهوية الوطنية:</strong> <span contenteditable="true" dir="ltr">1043972080</span></p>
+                    <p><strong data-i18n="emailLabel">البريد الإلكتروني:</strong> <span contenteditable="true" dir="ltr">Amirah@example.com</span></p>
+                    <p><strong data-i18n="phoneLabel">الجوال:</strong> <span contenteditable="true" dir="ltr">+966 50 000 0000</span></p>
+                    <p><strong data-i18n="addressLabel">العنوان:</strong> <span contenteditable="true" data-i18n="consultantAddress">الرياض، المملكة العربية السعودية</span></p>
+                </div>
+            </div>
+
+            <div style="text-align: left;">
+                <div class="invoice-badge" contenteditable="true" data-i18n="invoiceTitle">مطالبة مالية</div>
+                
+                <div class="meta-box">
+                    <div class="meta-item">
+                        <span data-i18n="invNoLabel">رقم الفاتورة:</span>
+                        <strong contenteditable="true" dir="ltr">INV-2026-001</strong>
+                    </div>
+                    <div class="meta-item">
+                        <span data-i18n="issueDateLabel">تاريخ الإصدار:</span>
+                        <strong contenteditable="true">27/10/2026</strong>
+                    </div>
+                    <div class="meta-item">
+                        <span data-i18n="dueDateLabel">تاريخ الاستحقاق:</span>
+                        <strong contenteditable="true" style="color:#0284c7;">10/11/2026</strong>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- Invoice Badge & Meta Details -->
-                <div class="w-full sm:w-auto flex flex-col justify-between items-start sm:items-end gap-2">
-                    <div class="bg-slate-900 text-white px-4 py-1.5 rounded-xl shadow-sm border-r-4 ltr:border-r-0 ltr:border-l-4 border-sky-500">
-                        <h2 class="text-sm font-bold tracking-widest uppercase" contenteditable="true" data-i18n="invoiceTitle">مطالبة مالية</h2>
+        <!-- Bill To Section -->
+        <div class="billed-box">
+            <span style="font-size:10px; font-weight:bold; color:#0284c7; text-transform:uppercase;" data-i18n="billedToTitle">صادرة إلى (الجهة / العميل):</span>
+            <h3 style="font-size:13px; font-weight:bold; color:#0f172a; margin-top:2px;" contenteditable="true" data-i18n="clientName">اسم الجهة أو الشركة المستفيدة</h3>
+            <p style="font-size:11px; color:#64748b;" contenteditable="true" data-i18n="clientAddress">العنوان: الرياض، المملكة العربية السعودية</p>
+        </div>
+
+        <!-- Services Table -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th data-i18n="thDesc">وصف الخدمة / الاستشارة</th>
+                        <th class="text-center" style="width:60px;" data-i18n="thQty">الكمية</th>
+                        <th class="text-left" style="width:110px;" data-i18n="thPrice">السعر (<span class="currency-label">ر.س</span>)</th>
+                        <th class="text-left" style="width:130px;" data-i18n="thTotal">الإجمالي (<span class="currency-label">ر.س</span>)</th>
+                        <th class="text-center no-print" style="width:40px;" data-i18n="thAction">إجراء</th>
+                    </tr>
+                </thead>
+                <tbody id="invoiceItems">
+                    <tr class="item-row">
+                        <td contenteditable="true" data-i18n="itemDesc1">تقديم خدمات استشارية في تطوير الأعمال والتخطيط التنفيذي</td>
+                        <td class="text-center qty" contenteditable="true" oninput="calculateTotals()">1</td>
+                        <td class="text-left price" contenteditable="true" oninput="calculateTotals()">5000</td>
+                        <td class="text-left line-total" style="font-weight:bold;">5,000.00 ر.س</td>
+                        <td class="text-center no-print">
+                            <button onclick="removeRow(this)" style="color:#f87171; background:none; border:none; cursor:pointer;" title="حذف">✕</button>
+                        </td>
+                    </tr>
+                    <tr class="item-row">
+                        <td contenteditable="true" data-i18n="itemDesc2">إعداد وتقييم دراسات الحوكمة والهيكلة المؤسسية</td>
+                        <td class="text-center qty" contenteditable="true" oninput="calculateTotals()">1</td>
+                        <td class="text-left price" contenteditable="true" oninput="calculateTotals()">3000</td>
+                        <td class="text-left line-total" style="font-weight:bold;">3,000.00 ر.س</td>
+                        <td class="text-center no-print">
+                            <button onclick="removeRow(this)" style="color:#f87171; background:none; border:none; cursor:pointer;" title="حذف">✕</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Totals & Notes Section -->
+        <div class="bottom-grid">
+            <div class="notes-box">
+                <h4 style="font-size:10px; font-weight:bold; color:#0f172a; margin-bottom:4px;" data-i18n="notesTitleText">ملاحظات وشروط:</h4>
+                <p contenteditable="true" data-i18n="noteBody">يتم سداد المستحقات المذكورة أعلاه خلال الفترة المحددة في تاريخ الاستحقاق. شكراً لكم.</p>
+            </div>
+
+            <div class="totals-box">
+                <div class="totals-row">
+                    <span data-i18n="subtotalLabel">المجموع الفرعي:</span>
+                    <strong id="subtotalVal">8,000.00 <span class="currency-label">ر.س</span></strong>
+                </div>
+                <div class="totals-row" style="align-items:center;">
+                    <span data-i18n="discountLabel">الخصم:</span>
+                    <div>
+                        <span contenteditable="true" id="discountInput" oninput="calculateTotals()" style="background:#f1f5f9; padding:1px 6px; border-radius:4px;">0</span>
+                        <span class="currency-label" style="font-weight:bold;">ر.س</span>
                     </div>
-                    
-                    <div class
+                </div>
+                <div class="grand-total-row">
+                    <span data-i18n="grandTotalLabel">المبلغ الإجمالي المستحق:</span>
+                    <span id="grandTotalVal">8,000.00 <span class="currency-label">ر.س</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signature Footer Section -->
+        <div class="footer-row">
+            <div style="color:#94a3b8; font-style:italic;" data-i18n="footerNote">
+                شكراً لثقتكم وتعاونكم المستمر.
+            </div>
+            <div style="text-align:center; min-width:160px;">
+                <p style="color:#64748b; font-size:10px; margin-bottom:4px;" data-i18n="signatureLabel">المستشار / مقدم الخدمة:</p>
+                <p style="font-weight:bold; color:#0f172a; border-top:1px solid #cbd5e1; padding-top:4px;" contenteditable="true" data-i18n="consultantNameSign">أميرة غربي الشمري</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript logic -->
+    <script>
+        const translations = {
+            ar: {
+                editHint: "اضغط على أي نص للتعديل مباشرة. يتم حساب الإجمالي تلقائياً.",
+                addRowBtn: "إضافة بند",
+                printBtn: "طباعة / حفظ PDF",
+                consultantName: "أميرة غربي الشمري",
+                consultantTitle: "مستشار إداري وتنفيذي",
+                idLabel: "الهوية الوطنية:",
+                emailLabel: "البريد الإلكتروني:",
+                phoneLabel: "الجوال:",
+                addressLabel: "العنوان:",
+                consultantAddress: "الرياض، المملكة العربية السعودية",
+                invoiceTitle: "مطالبة مالية",
+                invNoLabel: "رقم الفاتورة:",
+                issueDateLabel: "تاريخ الإصدار:",
+                dueDateLabel: "تاريخ الاستحقاق:",
+                billedToTitle: "صادرة إلى (الجهة / العميل):",
+                clientName: "اسم الجهة أو الشركة المستفيدة",
+                clientAddress: "العنوان: الرياض، المملكة العربية السعودية",
+                thDesc: "وصف الخدمة / الاستشارة",
+                thQty: "الكمية",
+                thPrice: "السعر",
+                thTotal: "الإجمالي",
+                thAction: "إجراء",
+                itemDesc1: "تقديم خدمات استشارية في تطوير الأعمال والتخطيط التنفيذي",
+                itemDesc2: "إعداد وتقييم دراسات الحوكمة والهيكلة المؤسسية",
+                notesTitleText: "ملاحظات وشروط:",
+                noteBody: "يتم سداد المستحقات المذكورة أعلاه خلال الفترة المحددة في تاريخ الاستحقاق. شكراً لكم.",
+                subtotalLabel: "المجموع الفرعي:",
+                discountLabel: "الخصم:",
+                grandTotalLabel: "المبلغ الإجمالي المستحق:",
+                footerNote: "شكراً لثقتكم وتعاونكم المستمر.",
+                signatureLabel: "المستشار / مقدم الخدمة:",
+                consultantNameSign: "أميرة غربي الشمري",
+                currency: "ر.س"
+            },
+            en: {
+                editHint: "Click any text to edit directly. Totals update automatically.",
+                addRowBtn: "Add Item",
+                printBtn: "Print / Save PDF",
+                consultantName: "Amirah Gharbi Alshammari",
+                consultantTitle: "Management & Executive Consultant",
+                idLabel: "National ID:",
+                emailLabel: "Email:",
+                phoneLabel: "Phone:",
+                addressLabel: "Address:",
+                consultantAddress: "Riyadh, Kingdom of Saudi Arabia",
+                invoiceTitle: "Financial Claim",
+                invNoLabel: "Invoice No:",
+                issueDateLabel: "Issue Date:",
+                dueDateLabel: "Due Date:",
+                billedToTitle: "Billed To (Client / Entity):",
+                clientName: "Client or Entity Name",
+                clientAddress: "Address: Riyadh, Saudi Arabia",
+                thDesc: "Description / Consultation",
+                thQty: "Qty",
+                thPrice: "Price",
+                thTotal: "Total",
+                thAction: "Action",
+                itemDesc1: "Providing consulting services in business development and executive planning",
+                itemDesc2: "Preparing and evaluating governance and institutional structuring studies",
+                notesTitleText: "Terms & Notes:",
+                noteBody: "Payment is due within the specified period. Thank you for your business.",
+                subtotalLabel: "Subtotal:",
+                discountLabel: "Discount:",
+                grandTotalLabel: "Grand Total:",
+                footerNote: "Thank you for your trust and continuous cooperation.",
+                signatureLabel: "Consultant / Service Provider:",
+                consultantNameSign: "Amirah Gharbi Alshammari",
+                currency: "SAR"
+            }
+        };
+
+        let currentLang = 'ar';
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            
+            document.documentElement.setAttribute('lang', lang);
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+            document.getElementById('btnAr').classList.toggle('active', lang === 'ar');
+            document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) {
+                    el.innerText = t[key];
+                }
+            });
+
+            document.querySelectorAll('.currency-label').forEach(el => {
+                el.innerText = t.currency;
+            });
+
+            calculateTotals();
+        }
+
+        function addRow() {
+            const tbody = document.getElementById('invoiceItems');
+            const row = document.createElement('tr');
+            row.className = "item-row";
+            
+            const descText = currentLang === 'ar' ? 'اكتب وصف الخدمة أو الاستشارة هنا...' : 'Enter service or consultation description here...';
+
+            row.innerHTML = `
+                <td contenteditable="true">${descText}</td>
+                <td class="text-center qty" contenteditable="true" oninput="calculateTotals()">1</td>
+                <td class="text-left price" contenteditable="true" oninput="calculateTotals()">0</td>
+                <td class="text-left line-total" style="font-weight:bold;">0.00 ${translations[currentLang].currency}</td>
+                <td class="text-center no-print">
+                    <button onclick="removeRow(this)" style="color:#f87171; background:none; border:none; cursor:pointer;" title="حذف">✕</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+            calculateTotals();
+        }
+
+        function removeRow(btn) {
+            const tbody = document.getElementById('invoiceItems');
+            if (tbody.rows.length > 1) {
+                btn.closest('tr').remove();
+                calculateTotals();
+            }
+        }
+
+        function calculateTotals() {
+            let subtotal = 0;
+            const rows = document.querySelectorAll('.item-row');
+            const curr = translations[currentLang].currency;
+
+            rows.forEach(row => {
+                const qtyText = row.querySelector('.qty').innerText.replace(/,/g, '').trim();
+                const priceText = row.querySelector('.price').innerText.replace(/,/g, '').trim();
+                const qty = parseFloat(qtyText) || 0;
+                const price = parseFloat(priceText) || 0;
+                const total = qty * price;
+                
+                row.querySelector('.line-total').innerText = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ' + curr;
+                subtotal += total;
+            });
+
+            const discountText = document.getElementById('discountInput').innerText.replace(/,/g, '').trim();
+            const discount = parseFloat(discountText) || 0;
+            const grandTotal = Math.max(0, subtotal - discount);
+
+            document.getElementById('subtotalVal').innerText = subtotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ' + curr;
+            document.getElementById('grandTotalVal').innerText = grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ' + curr;
+        }
+    </script>
+</body>
+</html>
