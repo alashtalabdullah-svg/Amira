@@ -46,7 +46,10 @@ html[lang="ar"] body { font-family: 'Tajawal', 'Open Sans', system-ui, sans-seri
 .lang-switch { display: flex; background: #f2f2f2; padding: 3px; border-radius: 8px; border: 1px solid #d5d5d5; }
 .lang-btn { background: transparent; border: none; padding: 4px 12px; border-radius: 6px; font: inherit; font-weight: 700; cursor: pointer; color: #666; }
 .lang-btn.active { background: #fff; color: #111; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
-.toolbar-info { color: #777; }
+.toggles { display: flex; gap: 14px; color: #444; font-weight: 600; }
+.toggles label { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
+.toggles input { width: 15px; height: 15px; accent-color: #222; cursor: pointer; }
+.hidden-row { display: none; }
 .btn-group { display: flex; gap: 8px; }
 .btn-action { padding: 7px 14px; border-radius: 8px; font: inherit; font-weight: 700; cursor: pointer; border: 1px solid #222; background: #fff; color: #222; }
 .btn-action.dark { background: #222; color: #fff; }
@@ -157,12 +160,17 @@ html[lang="ar"] .signature { font-family: 'Aref Ruqaa', serif; font-size: 34px; 
   html, body { background: #fff !important; padding: 0 !important; margin: 0 !important; }
   .no-print { display: none !important; }
   .page-wrap { width: auto !important; zoom: 1 !important; }
+  /* fits on one sheet (A4 or Letter): signature stays at the bottom, never spills to page 2 */
   .page {
-    width: 210mm; min-height: 296.5mm;
+    width: 100%; min-height: 0; height: 268mm;
+    padding-top: 22mm; padding-bottom: 6mm;
     box-shadow: none; margin: 0;
+    overflow: hidden;
+    break-after: avoid; page-break-after: avoid; break-inside: avoid;
   }
+  .info-grid { margin-top: 48mm; }
+  .signature { padding-top: 10px; }
   [contenteditable="true"]:hover, [contenteditable="true"]:focus { background: transparent !important; box-shadow: none !important; }
-  .is-zero { display: none; }
   tr { page-break-inside: avoid; }
 }
 </style>
@@ -175,7 +183,10 @@ html[lang="ar"] .signature { font-family: 'Aref Ruqaa', serif; font-size: 34px; 
     <button id="btnAr" onclick="switchLanguage('ar')" class="lang-btn active">العربية</button>
     <button id="btnEn" onclick="switchLanguage('en')" class="lang-btn">English</button>
   </div>
-  <div class="toolbar-info" data-i18n="editHint">اضغط على أي نص للتعديل مباشرة. يتم حساب الإجمالي تلقائياً.</div>
+  <div class="toggles">
+    <label><input type="checkbox" id="toggleDiscount" onchange="calculateTotals()"> <span data-i18n="showDiscount">إظهار الخصم</span></label>
+    <label><input type="checkbox" id="toggleTax" onchange="calculateTotals()"> <span data-i18n="showTax">إظهار الضريبة</span></label>
+  </div>
   <div class="btn-group">
     <button onclick="addRow()" class="btn-action">+ <span data-i18n="addRowBtn">إضافة بند</span></button>
     <button onclick="window.print()" class="btn-action dark"><span data-i18n="printBtn">طباعة / حفظ PDF</span></button>
@@ -273,7 +284,8 @@ html[lang="ar"] .signature { font-family: 'Aref Ruqaa', serif; font-size: 34px; 
 <script>
 const translations = {
   ar: {
-    editHint: "اضغط على أي نص للتعديل مباشرة. يتم حساب الإجمالي تلقائياً.",
+    showDiscount: "إظهار الخصم",
+    showTax: "إظهار الضريبة",
     addRowBtn: "إضافة بند",
     printBtn: "طباعة / حفظ PDF",
     invoiceTitle: "فاتورة",
@@ -305,7 +317,8 @@ const translations = {
     currency: "ر.س"
   },
   en: {
-    editHint: "Click any text to edit it. Totals update automatically.",
+    showDiscount: "Show discount",
+    showTax: "Show tax",
     addRowBtn: "Add Item",
     printBtn: "Print / Save PDF",
     invoiceTitle: "INVOICE",
@@ -387,16 +400,18 @@ function calculateTotals() {
     row.querySelector('.line-total').innerText = money(total);
     subtotal += total;
   });
-  const discount = num(document.getElementById('discountInput').innerText);
-  const taxRate = num(document.getElementById('taxInput').innerText);
+  const showDiscount = document.getElementById('toggleDiscount').checked;
+  const showTax = document.getElementById('toggleTax').checked;
+  // hidden discount / tax are completely removed from the invoice and the calculation
+  const discount = showDiscount ? num(document.getElementById('discountInput').innerText) : 0;
+  const taxRate = showTax ? num(document.getElementById('taxInput').innerText) : 0;
   const afterDiscount = Math.max(0, subtotal - discount);
   const grand = afterDiscount + afterDiscount * taxRate / 100;
 
   document.getElementById('subtotalVal').innerText = money(subtotal);
   document.getElementById('grandTotalVal').innerText = money(grand);
-  // hide zero discount / tax rows when printing
-  document.getElementById('discountRow').classList.toggle('is-zero', discount === 0);
-  document.getElementById('taxRow').classList.toggle('is-zero', taxRate === 0);
+  document.getElementById('discountRow').classList.toggle('hidden-row', !showDiscount);
+  document.getElementById('taxRow').classList.toggle('hidden-row', !showTax);
 }
 
 // Scale the A4 page down on small screens
